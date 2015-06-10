@@ -62,7 +62,7 @@ type Network struct {
 
 func Compose(funcs ...bufio.SplitFunc) bufio.SplitFunc {
 	return func(data []byte, atEOF bool) (advance int, token []byte, err error) {
-		if atEOF {
+		if atEOF || len(data) == 0 {
 			return 0, nil, nil
 		}
 
@@ -110,7 +110,7 @@ func SkippingWhitespace(fn bufio.SplitFunc) bufio.SplitFunc {
 
 func ScanDots(data []byte, atEOF bool) (int, []byte, error) {
 	pos := 0
-	for data[pos] == '.' {
+	for pos < len(data) && data[pos] == '.' {
 		pos++
 	}
 
